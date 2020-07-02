@@ -4,14 +4,24 @@
 	"description": "auth-api",
 	"main": "index.js",
 	"scripts": {
-		"dev": "nodemon server.js"
+		"server-dev": "cross-env NODE_ENV=dev PORT=5000 nodemon index.js",
+		"test": "cross-env NODE_ENV=test mocha --timeout 5000 __tests__/server/**/*.test.js",
+		"start-dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
+		"report": "cross-env NODE_ENV=test nyc --reporter=lcov mocha --timeout 5000 __tests__/server/**/*.test.js",
+		"text-report": "cross-env NODE_ENV=test nyc --reporter=text-summary mocha --timeout 5000 __tests__/server/**/*.test.js",
+		"nyc": "cross-env NODE_ENV=test nyc mocha --timeout 5000 __tests__/server/**/*.test.js"
 	},
 	"keywords": [],
 	"author": "Christian",
 	"license": "ISC",
 	"dependencies": {
+		"axios": "^0.19.2",
 		"bcryptjs": "^2.4.3",
 		"body-parser": "^1.19.0",
+		"concurrently": "^5.2.0",
+		"cookie-parser": "^1.4.5",
+		"cors": "^2.8.5",
+		"cross-env": "^7.0.2",
 		"express": "^4.17.1",
 		"express-promise-router": "^4.0.1",
 		"joi": "^14.3.1",
@@ -19,10 +29,32 @@
 		"mongoose": "^5.9.20",
 		"morgan": "^1.10.0",
 		"passport": "^0.4.1",
+		"passport-google-plus-token": "^2.1.0",
 		"passport-jwt": "^4.0.0",
 		"passport-local": "^1.0.0"
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.4"
+		"chai": "^4.2.0",
+		"chai-http": "^4.3.0",
+		"faker": "^4.1.0",
+		"mocha": "^8.0.1",
+		"nodemon": "^2.0.4",
+		"nyc": "^15.1.0",
+		"rewire": "^5.0.0",
+		"sinon": "^9.0.2",
+		"sinon-chai": "^3.5.0"
+	},
+	"nyc": {
+		"exclude": [
+			"server/server.js",
+			"server/configuration/index.js",
+			"server/passport.js",
+			"server/models/**/*.js",
+			"server/helpers/**/*.js",
+			"__tests__",
+			"node_modules"
+		],
+		"cache": false,
+		"report-dir": "./__tests__/report"
 	}
 }

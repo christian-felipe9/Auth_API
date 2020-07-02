@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+
 const User = require('../models/user');
-const { JWT_SECRET } = require('../config').dev;
+const { JWT_SECRET } = require('../configuration');
 
 const signToken = user => {
 	return jwt.sign(
@@ -19,14 +20,20 @@ module.exports = {
 		const { email, password } = req.value.body;
 
 		//Check if there is a user with the same e-mail
-		const foundUser = await User.findOne({ email });
+		const foundUser = await User.findOne({ 'local.email': email });
 
 		if (foundUser) {
 			return res.status(403).json({ error: 'Email is already in use' });
 		}
 
 		//Create  a new user
-		const newUser = new User({ email, password });
+		const newUser = new User({
+			method: 'local',
+			local: {
+				email,
+				password,
+			},
+		});
 		await newUser.save();
 
 		// Generate Token
@@ -37,6 +44,14 @@ module.exports = {
 	},
 
 	signIn: async (req, res, next) => {
+		// Generate Token
+		const token = signToken(req.user);
+
+		//Respond with Token
+		res.status(200).json({ token });
+	},
+
+	signInGoogleOAuth: async (req, res, next) => {
 		// Generate Token
 		const token = signToken(req.user);
 
