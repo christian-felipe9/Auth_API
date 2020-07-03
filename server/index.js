@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const {
-	MONGO_DB_URL_TEST,
-	MONGO_DB_URL_DEV,
-	MONGO_DB_URL_PRD,
+	MONGO_DB: { MONGO_DB_URL_TEST },
+	MONGO_DB: { MONGO_DB_URL_DEV },
+	MONGO_DB: { MONGO_DB_URL_PRD },
 } = require('./configuration');
 
 mongoose.Promise = global.Promise;
@@ -32,8 +32,8 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 let db = mongoose.connection;
-db.once('open', () => console.log('connected to the database'));
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => console.log('Connected to the Mongo Database!'));
+db.on('error', console.error.bind(console, 'MongoDB connection error!'));
 
 const server = express();
 
