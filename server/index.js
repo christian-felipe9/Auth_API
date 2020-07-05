@@ -1,50 +1,7 @@
-const express = require('express');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const server = require('./server');
 
-const {
-	MONGO_DB: { MONGO_DB_URL_TEST },
-	MONGO_DB: { MONGO_DB_URL_DEV },
-	MONGO_DB: { MONGO_DB_URL_PRD },
-} = require('./configuration');
+//Start Server
+const PORT = process.env.PORT || 5000;
+server.listen(PORT);
 
-mongoose.Promise = global.Promise;
-
-if (process.env.NODE_ENV === 'test') {
-	mongoose.connect(MONGO_DB_URL_TEST, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		useCreateIndex: true,
-	});
-} else if (process.env.NODE_ENV === 'dev') {
-	mongoose.connect(MONGO_DB_URL_DEV, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		useCreateIndex: true,
-	});
-} else if (process.env.NODE_ENV === 'prd') {
-	mongoose.connect(MONGO_DB_URL_PRD, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		useCreateIndex: true,
-	});
-}
-
-let db = mongoose.connection;
-db.once('open', () => console.log('Connected to the Mongo Database!'));
-db.on('error', console.error.bind(console, 'MongoDB connection error!'));
-
-const server = express();
-
-//Middlewares
-if (!process.env.NODE_ENV === 'test') {
-	server.use(morgan('dev'));
-}
-
-server.use(bodyParser.json());
-
-//Routes
-server.use('/users', require('./routes/users'));
-
-module.exports = server;
+console.log(`Server Listening at ${PORT}!`);

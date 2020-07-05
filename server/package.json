@@ -4,7 +4,8 @@
 	"description": "auth-api",
 	"main": "index.js",
 	"scripts": {
-		"server-dev": "cross-env NODE_ENV=dev PORT=5000 nodemon index.js",
+		"server-dev": "cross-env NODE_ENV=dev PORT=5000 nodemon server/index.js",
+		"client-dev": "npm start --prefix ../client",
 		"test": "cross-env NODE_ENV=test mocha --timeout 5000 __tests__/server/**/*.test.js",
 		"start-dev": "concurrently \"npm run server-dev\" \"npm run client-dev\"",
 		"report": "cross-env NODE_ENV=test nyc --reporter=lcov mocha --timeout 5000 __tests__/server/**/*.test.js",
