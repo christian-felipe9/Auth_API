@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import reduxThunk from 'redux-thunk';
 
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,7 +16,7 @@ import Cadastrar from './pages/Cadastrar';
 import Login from './pages/Login';
 import rootReducers from './reducers';
 
-const store = createStore(rootReducers);
+const store = createStore(rootReducers, applyMiddleware(reduxThunk));
 
 ReactDOM.render(
 	<Provider store={store}>

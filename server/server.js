@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const {
 	MONGO_DB: { MONGO_DB_URL_TEST },
@@ -41,6 +42,8 @@ const server = express();
 if (!process.env.NODE_ENV === 'test') {
 	server.use(morgan('dev'));
 }
+
+server.use(cors());
 
 server.use(bodyParser.json());
 
